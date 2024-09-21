@@ -35,6 +35,7 @@ async fn main()->std::io::Result<()> {
         .service(update_todo_title)
         .service(update_todo_description)
         .service(mark_status_completed)
+        .service(delete_a_todo)
     }).bind(("127.0.0.1",8080))?.run();
     println!("Server running on PORT 127.0.0.1:8080");
     server.await

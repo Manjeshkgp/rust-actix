@@ -1,7 +1,5 @@
 use actix_web::{
-    get, post,
-    web::{Data, Json},
-    HttpResponse, Responder,
+    delete, get, post, web::{Data, Json}, HttpResponse, Responder
 };
 use serde::{Deserialize, Serialize};
 use sqlx::{Error, FromRow, MySqlPool};
@@ -115,5 +113,14 @@ pub async fn get_all_todos(db: Data<MySqlPool>) -> impl Responder {
         Err(_e) => HttpResponse::InternalServerError().json(TypeDbError {
             error: _e.to_string(),
         }),
+    }
+}
+
+#[delete("/todos/delete")]
+pub async fn delete_a_todo(db:Data<MySqlPool>,body:Json<Id>)->impl Responder{
+    let res = sqlx::query("delete from todos WHERE id=?").bind(body.id).execute(&**db).await;
+    match res {
+        Ok(_)=>HttpResponse::Ok(),
+        Err(_)=>HttpResponse::InternalServerError()
     }
 }
