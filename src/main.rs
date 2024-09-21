@@ -19,6 +19,7 @@ async fn main()->std::io::Result<()> {
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(100) NOT NULL,
         description VARCHAR(100) NULL,
+        status VARCHAR(100) DEFAULT 'New',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     "#;
@@ -31,6 +32,9 @@ async fn main()->std::io::Result<()> {
         .service(create_new_user)
         .service(create_new_todo)
         .service(get_all_todos)
+        .service(update_todo_title)
+        .service(update_todo_description)
+        .service(mark_status_completed)
     }).bind(("127.0.0.1",8080))?.run();
     println!("Server running on PORT 127.0.0.1:8080");
     server.await
